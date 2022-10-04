@@ -1,0 +1,25 @@
+# Default values for wcg.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+wcg:
+  fullname: wcg-prod
+
+
+image:
+  repository: ghcr.io/fenikks/wcg
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: kube
+#  pullSecret: ["github-pull-secret"]
+
+nameOverride: ""
+fullnameOverride: "wcg-prod"
+
+
+service:
+  name: wcg-prod
+  type: NodePort
+  port: 8888

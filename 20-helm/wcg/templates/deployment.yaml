@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.wcg.fullname }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: wcg
+  template:
+    metadata:
+      labels:
+        app: wcg
+    spec:
+#      imagePullSecrets: {{ .Values.image.pullSecret }}
+#      imagePullSecrets: 
+#      - github-pull-secret
+      imagePullSecrets: 
+      - name: github-pull-secret
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+
