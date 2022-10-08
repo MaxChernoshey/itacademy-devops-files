@@ -1,0 +1,46 @@
+# .gitlab-ci.yml
+
+image:
+    name: golang:1.16
+
+.test-script: &test_script
+    - env
+    - ls -la
+    - echo "Hello from pipeline"
+
+stages:
+  - prep          # List of stages for jobs, and their order of execution
+  - build
+
+preparation-job:       # This job runs in the build stage, which runs first.
+  stage: prep
+  variables:
+    TF_VAR_env: prod
+  script:
+    - *test_script
+    - apt install -y git
+    - git clone https://github.com/Fenikks/word-cloud-generator.git
+    - cd word-cloud-generator
+    - make
+    - ls -l
+    - ls -l artifacts  
+    - echo from main
+  only:
+    - main  
+
+
+preparation-job test:       # This job runs in the build stage, which runs first.
+  stage: prep
+  variables:
+    TF_VAR_env: dev
+  script:
+    - *test_script
+    - apt install -y git
+    - git clone https://github.com/Fenikks/word-cloud-generator.git
+    - cd word-cloud-generator
+    - make
+    - ls -l
+    - ls -l artifacts  
+    - echo from dev
+  only:
+    - dev  
